@@ -37,9 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   shadow_overlay: ^1.0.5
   http: ^0.13.6
-  google_nav_bar: ^5.0.6
+  molten_navigationbar_flutter: ^1.0.0
   
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,7 +79,7 @@ flutter:
   # example:
   fonts:
     - family: Nexa
-      fonts:
+      fonts: 
         - asset: assets/fonts/Nexa Light.otf
           weight: 300
         - asset: assets/fonts/Nexa Bold.otf

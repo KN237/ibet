@@ -15,6 +15,8 @@ class FrontHelpers {
 
   late var blanc = const Color(0xfffafafa);
 
+  late var vert =  Colors.green;
+
   late var gris = const Color(0xff737373);
 
   late var orange = const Color(0xffff931e);
