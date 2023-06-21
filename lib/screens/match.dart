@@ -4,8 +4,13 @@ import 'package:Ibet/widgets.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 
 class Match extends StatelessWidget {
-  const Match({super.key});
-
+  Match({super.key});
+  List<Widget> event = [
+    FixtureEvent(),
+    FixtureEvent(),
+    FixtureEvent(),
+    FixtureEvent(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,10 +32,11 @@ class Match extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        color: FrontHelpers().blanc,
-        child: SafeArea(
-          child: SingleChildScrollView(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: event.length * 100 + MediaQuery.of(context).size.height,
             child: Column(
               children: [
                 Container(
@@ -146,24 +152,24 @@ class Match extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: (2*MediaQuery.of(context).size.height) / 3,
-                  decoration: BoxDecoration(
-                    color: FrontHelpers().rouge.withOpacity(0.8),
-                  ),
-                  child: ContainedTabBarView(
-                    tabBarProperties:
-                        TabBarProperties(indicatorColor: FrontHelpers().rouge),
-                    tabs: [Text('Statistics'), Text('Lineups'), Text("Events")],
-                    views: [
-                      Container(
-                        color: FrontHelpers().blanc,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 10.0
-                            ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: FrontHelpers().rouge.withOpacity(0.8),
+                    ),
+                    child: ContainedTabBarView(
+                      tabBarProperties: TabBarProperties(
+                          indicatorColor: FrontHelpers().rouge),
+                      tabs: [
+                        Text('Statistics'),
+                        Text('Lineups'),
+                        Text("Events")
+                      ],
+                      views: [
+                        Container(
+                          color: FrontHelpers().blanc,
+                          child: Column(children: [
+                            SizedBox(height: 10.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -198,21 +204,166 @@ class Match extends StatelessWidget {
                                       Text("FC Barcelone"),
                                     ],
                                   ),
-                                )
+                                ),
                               ],
-                            )
-                          ],
+                            ),
+                            Characteristique(
+                              team1: "12",
+                              team2: "2",
+                              title: "Shots on Goals",
+                            ),
+                            Characteristique(
+                              team1: "12",
+                              team2: "2",
+                              title: "Shots of Goals",
+                            ),
+                          ]),
                         ),
-                      ),
-                      Container(color: Colors.green),
-                      Container(color: Colors.blue)
-                    ],
-                    onChange: (index) => print(index),
+                        Container(
+                        height: 10,
+                        color: FrontHelpers().blanc,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top:20.0),
+                          child: Align(alignment: Alignment.topCenter,child: Text("Available soon",style: FrontHelpers().h3.copyWith(color: FrontHelpers().gris, fontFamily: "Nexa"),)),
+                        ),
+                        ),
+                        Container(
+                          color: FrontHelpers().blanc,
+                          child: Column(
+                            children: event,
+                          ),
+                        ),
+                      ],
+                      onChange: (index) => print(index),
+                    ),
                   ),
                 )
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class Characteristique extends StatelessWidget {
+  Characteristique({
+    required this.team1,
+    required this.team2,
+    required this.title,
+  });
+
+  String team1;
+  String team2;
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(team1),
+          SizedBox(
+            width: 05,
+          ),
+          Text(title),
+          SizedBox(
+            width: 05,
+          ),
+          Text(team2),
+        ],
+      ),
+    );
+  }
+}
+
+class FixtureEvent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 03.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width -
+            (MediaQuery.of(context).size.width / 20),
+        height: 100.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/fcb.png",
+                  width: 15,
+                ),
+                SizedBox(
+                  width: 05,
+                ),
+                Text("FC Barcelone"),
+              ],
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      textBaseline: TextBaseline.alphabetic,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      children: [
+                        Text("Goal"),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text("L. Diaz"),
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: FrontHelpers().rouge),
+                      child: Center(
+                        child: Text(
+                          "12",
+                          style: FrontHelpers()
+                              .bodyText
+                              .copyWith(color: FrontHelpers().blanc),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Icon(Icons.sports_soccer),
+                  ],
+                ),
+                Column(
+                  textBaseline: TextBaseline.alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text("Normal Goal"),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text("Assist: Firmino"),
+                  ],
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
