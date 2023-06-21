@@ -18,12 +18,11 @@ class Fixtures extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   height: 50,
                   child: ListView(scrollDirection: Axis.horizontal, children: [
-                    LeagueRoundedCard(),
-                    LeagueRoundedCard(),
-                    LeagueRoundedCard(),
-                    LeagueRoundedCard(),
-                    LeagueRoundedCard(),
-                    LeagueRoundedCard(),
+                   LeagueRoundedCard(image: "league1.png", name: " League 1"),
+                    LeagueRoundedCard(image: "league2.png", name: " League 2"),
+                    LeagueRoundedCard(image: "league3.png", name: " League 3"),
+                    LeagueRoundedCard(image: "league4.png", name: " League 4"),
+                    LeagueRoundedCard(image: "league5.png", name: " League 5"),
                   ]),
                 ),
 
@@ -31,10 +30,10 @@ class Fixtures extends StatelessWidget {
                   height: 20.0,
                 ),
 
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard()
+                MatchCard(status: false,),
+                MatchCard(status: true,),
+                MatchCard(status: true,),
+                MatchCard(status: false,)
               ],
             ),
           ),

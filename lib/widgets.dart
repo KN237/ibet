@@ -1,52 +1,53 @@
-
+import 'package:Ibet/screens/match.dart';
 import 'package:flutter/material.dart';
 import 'package:Ibet/helpers/frontHelpers.dart';
-
+import 'dart:math';
 
 class LeagueRoundedCard extends StatelessWidget {
   const LeagueRoundedCard({
-    super.key,
+    required this.image,
+    required this.name,
   });
-
+  final String image;
+  final String name;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal:20.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
       margin: EdgeInsets.only(right: 10.0),
       decoration: BoxDecoration(
-        gradient: FrontHelpers().rougeGradient,
-        borderRadius: BorderRadius.circular(10)
-      ),
+          gradient: FrontHelpers().bleuGradient,
+          borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
           Image.asset(
-            "assets/images/league1.png",
+            "assets/images/${image}",
             width: 25,
           ),
           Text(
-            "Champions League",
-            style: FrontHelpers().h4.copyWith(
-                color: FrontHelpers().blanc,
-                fontFamily: "Nexa"),
+            name,
+            style: FrontHelpers()
+                .h4
+                .copyWith(color: FrontHelpers().blanc, fontFamily: "Nexa"),
           )
         ],
       ),
     );
-  }}
-
+  }
+}
 
 class LeagueWidget extends StatelessWidget {
   const LeagueWidget({
-    super.key,
+    required this.image,
   });
-
+  final String image;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 08.0),
       child: CircleAvatar(
         child: Image.asset(
-          "assets/images/league4.png",
+          "assets/images/${image}",
           width: 50,
         ),
         backgroundColor: FrontHelpers().blanc,
@@ -57,10 +58,11 @@ class LeagueWidget extends StatelessWidget {
 }
 
 class FixtureWidget extends StatelessWidget {
-  const FixtureWidget({
+  FixtureWidget({
     super.key,
   });
-
+  var r = Random();
+  late int tmp = r.nextInt(3);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -73,7 +75,11 @@ class FixtureWidget extends StatelessWidget {
             width: 150,
             margin: const EdgeInsets.only(right: 10.0),
             decoration: BoxDecoration(
-                gradient: FrontHelpers().rougeGradient,
+                gradient: tmp == 0
+                    ? FrontHelpers().rougeGradient
+                    : tmp == 1
+                        ? FrontHelpers().orangeGradient
+                        : FrontHelpers().bleuGradient,
                 borderRadius: BorderRadius.circular(20)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -148,13 +154,29 @@ class FixtureWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                       color: FrontHelpers().blanc,
                     ),
-                    child: Center(
-                        child: Text(
-                      "Live",
-                      style: FrontHelpers()
-                          .h4
-                          .copyWith(color: FrontHelpers().rouge),
-                    )),
+                    child: tmp == 0
+                        ? Center(
+                            child: Text(
+                            "Live",
+                            style: FrontHelpers()
+                                .h4
+                                .copyWith(color: FrontHelpers().rouge),
+                          ))
+                        : tmp == 1
+                            ? Center(
+                                child: Text(
+                                "Live",
+                                style: FrontHelpers()
+                                    .h4
+                                    .copyWith(color: FrontHelpers().orange),
+                              ))
+                            : Center(
+                                child: Text(
+                                "Live",
+                                style: FrontHelpers()
+                                    .h4
+                                    .copyWith(color: FrontHelpers().bleu),
+                              )),
                   ),
                 )
               ],
@@ -167,10 +189,10 @@ class FixtureWidget extends StatelessWidget {
 }
 
 class MatchCard extends StatelessWidget {
-  const MatchCard({
-    super.key,
+  MatchCard({
+    required this.status,
   });
-
+  bool status;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -218,7 +240,9 @@ class MatchCard extends StatelessWidget {
                     height: 25,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
-                      color: FrontHelpers().rouge,
+                      color: status == true
+                          ? FrontHelpers().rouge
+                          : FrontHelpers().bleu,
                     ),
                     child: Center(
                         child: Text(
@@ -232,8 +256,8 @@ class MatchCard extends StatelessWidget {
                     height: 01,
                   ),
                 ]),
-                SizedBox(),
-                SizedBox(),
+            SizedBox(),
+            SizedBox(),
             Column(
               children: [
                 SizedBox(
@@ -257,10 +281,9 @@ class MatchCard extends StatelessWidget {
 }
 
 class RowTitleWidget extends StatelessWidget {
-  const RowTitleWidget({
-    super.key,
-  });
-
+  RowTitleWidget({required this.title, required this.widget});
+  String title;
+  Widget widget;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -275,32 +298,38 @@ class RowTitleWidget extends StatelessWidget {
             textBaseline: TextBaseline.ideographic,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Image.asset(
-                "assets/images/fr.png",
-                width: 20,
-              ),
+              // Image.asset(
+              //   "assets/images/fr.png",
+              //   width: 20,
+              // ),
+              widget,
               Text(
-                " Live Fixtures",
+                title,
                 style: FrontHelpers().h2,
               ),
             ],
           ),
-          Row(
-            textBaseline: TextBaseline.alphabetic,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "View all",
-                style: FrontHelpers().h3.copyWith(fontFamily: "Nexa"),
-              ),
-              SizedBox(
-                width: 03,
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: FrontHelpers().h2.fontSize,
-              ),
-            ],
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context){ return Match();}));
+            },
+            child: Row(
+              textBaseline: TextBaseline.alphabetic,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "View all",
+                  style: FrontHelpers().h3.copyWith(fontFamily: "Nexa"),
+                ),
+                SizedBox(
+                  width: 03,
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: FrontHelpers().h2.fontSize,
+                ),
+              ],
+            ),
           ),
         ],
       ),

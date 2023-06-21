@@ -80,14 +80,22 @@ class Screen1 extends StatelessWidget {
                         bottomLeft: Radius.circular(50)),
                   ),
                   child: ListView(scrollDirection: Axis.horizontal, children: [
-                    LeagueWidget(),
-                    LeagueWidget(),
-                    LeagueWidget(),
-                    LeagueWidget(),
-                    LeagueWidget(),
+                    LeagueWidget(
+                      image: 'league1.png',
+                    ),
+                    LeagueWidget(image: 'league2.png'),
+                    LeagueWidget(image: 'league3.png'),
+                    LeagueWidget(image: 'league4.png'),
+                    LeagueWidget(image: 'league5.png'),
                   ]),
                 ),
-                RowTitleWidget(),
+                RowTitleWidget(
+                  title: " Live fixtures",
+                  widget: Image.asset(
+                    "assets/images/fr.png",
+                    width: 20,
+                  ),
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 3.5,
@@ -98,22 +106,29 @@ class Screen1 extends StatelessWidget {
                     FixtureWidget(),
                   ]),
                 ),
-                RowTitleWidget(),
+                RowTitleWidget(
+                    title: " Fixtures", widget: Icon(Icons.calendar_month, color: FrontHelpers().bleu,)),
                 SizedBox(
                   height: 10.0,
                 ),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
-                MatchCard(),
+                MatchCard(
+                  status: true,
+                ),
+                MatchCard(
+                  status: false,
+                ),
+                MatchCard(
+                  status: true,
+                ),
+                MatchCard(
+                  status: true,
+                ),
+                MatchCard(
+                  status: false,
+                ),
+                MatchCard(
+                  status: true,
+                ),
               ],
             ),
           ),
