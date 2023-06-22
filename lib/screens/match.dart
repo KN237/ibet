@@ -220,12 +220,19 @@ class Match extends StatelessWidget {
                           ]),
                         ),
                         Container(
-                        height: 10,
-                        color: FrontHelpers().blanc,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top:20.0),
-                          child: Align(alignment: Alignment.topCenter,child: Text("Available soon",style: FrontHelpers().h3.copyWith(color: FrontHelpers().gris, fontFamily: "Nexa"),)),
-                        ),
+                          height: 10,
+                          color: FrontHelpers().blanc,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  "Available soon",
+                                  style: FrontHelpers().h3.copyWith(
+                                      color: FrontHelpers().gris,
+                                      fontFamily: "Nexa"),
+                                )),
+                          ),
                         ),
                         Container(
                           color: FrontHelpers().blanc,
@@ -306,60 +313,69 @@ class FixtureEvent extends StatelessWidget {
               ],
             ),
             SizedBox(
-              width: 10,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      textBaseline: TextBaseline.alphabetic,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      children: [
-                        Text("Goal"),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text("L. Diaz"),
-                      ],
-                    ),
-                  ],
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        textBaseline: TextBaseline.alphabetic,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        children: [
+                          Text("Goal"),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Text("L. Diaz"),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: FrontHelpers().rouge),
-                      child: Center(
-                        child: Text(
-                          "12",
-                          style: FrontHelpers()
-                              .bodyText
-                              .copyWith(color: FrontHelpers().blanc),
+                Container(
+                  width: MediaQuery.of(context).size.width / 9,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: FrontHelpers().rouge),
+                        child: Center(
+                          child: Text(
+                            "12",
+                            style: FrontHelpers()
+                                .bodyText
+                                .copyWith(color: FrontHelpers().blanc),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Icon(Icons.sports_soccer),
-                  ],
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Icon(Icons.sports_soccer),
+                    ],
+                  ),
                 ),
-                Column(
-                  textBaseline: TextBaseline.alphabetic,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text("Normal Goal"),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Text("Assist: Firmino"),
-                  ],
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  child: Column(
+                    textBaseline: TextBaseline.alphabetic,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text("Normal Goal"),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text("Assist: Firmino"),
+                    ],
+                  ),
                 ),
               ],
             )
