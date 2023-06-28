@@ -16,7 +16,7 @@ class LeagueRoundedCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       margin: EdgeInsets.only(right: 10.0),
       decoration: BoxDecoration(
-          gradient: FrontHelpers().bleuGradient,
+          gradient: FrontHelpers().orangeGradient,
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -75,11 +75,7 @@ class FixtureWidget extends StatelessWidget {
             width: 150,
             margin: const EdgeInsets.only(right: 10.0),
             decoration: BoxDecoration(
-                gradient: tmp == 0
-                    ? FrontHelpers().rougeGradient
-                    : tmp == 1
-                        ? FrontHelpers().orangeGradient
-                        : FrontHelpers().bleuGradient,
+                gradient: FrontHelpers().grisGradient,
                 borderRadius: BorderRadius.circular(20)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -154,29 +150,13 @@ class FixtureWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                       color: FrontHelpers().blanc,
                     ),
-                    child: tmp == 0
-                        ? Center(
-                            child: Text(
-                            "Live",
-                            style: FrontHelpers()
-                                .h4
-                                .copyWith(color: FrontHelpers().rouge),
-                          ))
-                        : tmp == 1
-                            ? Center(
-                                child: Text(
-                                "Live",
-                                style: FrontHelpers()
-                                    .h4
-                                    .copyWith(color: FrontHelpers().orange),
-                              ))
-                            : Center(
-                                child: Text(
-                                "Live",
-                                style: FrontHelpers()
-                                    .h4
-                                    .copyWith(color: FrontHelpers().bleu),
-                              )),
+                    child: Center(
+                        child: Text(
+                      "Live",
+                      style: FrontHelpers()
+                          .h4
+                          .copyWith(color: FrontHelpers().gris),
+                    )),
                   ),
                 )
               ],
@@ -242,7 +222,7 @@ class MatchCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                       color: status == true
                           ? FrontHelpers().rouge
-                          : FrontHelpers().bleu,
+                          : FrontHelpers().gris,
                     ),
                     child: Center(
                         child: Text(
@@ -311,7 +291,9 @@ class RowTitleWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context){ return Match();}));
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Match();
+              }));
             },
             child: Row(
               textBaseline: TextBaseline.alphabetic,

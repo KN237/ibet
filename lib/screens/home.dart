@@ -107,7 +107,7 @@ class Screen1 extends StatelessWidget {
                   ]),
                 ),
                 RowTitleWidget(
-                    title: " Fixtures", widget: Icon(Icons.calendar_month, color: FrontHelpers().bleu,)),
+                    title: " Fixtures", widget: Icon(Icons.calendar_month, color: FrontHelpers().gris,)),
                 SizedBox(
                   height: 10.0,
                 ),

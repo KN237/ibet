@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FrontHelpers {
-  final h1 = const TextStyle(fontSize: 20, fontWeight: FontWeight.w900,color: Color(0xff000000));
+  final h1 = const TextStyle(
+      fontSize: 20, fontWeight: FontWeight.w900, color: Color(0xff000000));
 
   late var h2 = h1.copyWith(fontSize: 18);
 
@@ -15,14 +16,21 @@ class FrontHelpers {
 
   late var blanc = const Color(0xfffafafa);
 
-  late var vert =  Colors.green;
+  late var vert = Colors.green;
 
   late var gris = const Color(0xff737373);
+
+  late var grisGradient = const SweepGradient(
+          colors: [Color(0xff2e2e2e), Color(0xff747474)],
+          stops: [0, 1],
+          center: Alignment.topLeft,
+        );
+        
 
   late var orange = const Color(0xffff931e);
 
   late var orangeGradient = const LinearGradient(
-    colors: [Color(0xffff931e), Color(0xabff931e)],
+    colors: [Color(0xff747474), Color(0xab747474)],
     stops: [0, 1],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

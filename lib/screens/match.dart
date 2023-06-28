@@ -43,7 +43,7 @@ class Match extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 3,
                   decoration: BoxDecoration(
-                    gradient: FrontHelpers().rougeGradient,
+                    gradient: FrontHelpers().orangeGradient,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -155,11 +155,11 @@ class Match extends StatelessWidget {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: FrontHelpers().rouge.withOpacity(0.8),
+                      color: FrontHelpers().gris.withOpacity(0.8),
                     ),
                     child: ContainedTabBarView(
                       tabBarProperties: TabBarProperties(
-                          indicatorColor: FrontHelpers().rouge),
+                          indicatorColor: FrontHelpers().gris),
                       tabs: [
                         Text('Statistics'),
                         Text('Lineups'),
