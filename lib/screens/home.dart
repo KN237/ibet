@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:Ibet/helpers/frontHelpers.dart';
 import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
 import 'package:Ibet/widgets.dart';
+import 'package:http/http.dart' as http;
+import '../helpers/apiHelpers.dart';
+import '../models/league.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -52,10 +55,23 @@ class _HomeState extends State<Home> {
   }
 }
 
-class Screen1 extends StatelessWidget {
+class Screen1 extends StatefulWidget {
   const Screen1({
     super.key,
   });
+
+  @override
+  State<Screen1> createState() => _Screen1State();
+}
+
+class _Screen1State extends State<Screen1> {
+  late Future<List<League>> leagues;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    leagues = ApiHelper().getLeagues();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,15 +95,38 @@ class Screen1 extends StatelessWidget {
                         topLeft: Radius.circular(50),
                         bottomLeft: Radius.circular(50)),
                   ),
-                  child: ListView(scrollDirection: Axis.horizontal, children: [
-                    LeagueWidget(
-                      image: 'league1.png',
-                    ),
-                    LeagueWidget(image: 'league2.png'),
-                    LeagueWidget(image: 'league3.png'),
-                    LeagueWidget(image: 'league4.png'),
-                    LeagueWidget(image: 'league5.png'),
-                  ]),
+                  child: FutureBuilder(
+                      future: leagues,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        print(snapshot.connectionState);
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator( color: FrontHelpers().blanc,));
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.done) {
+                          if (snapshot.hasError) {
+                            return const Text('Error');
+                          } else if (snapshot.hasData) {
+                            return ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot.data.length == null
+                                    ? 0
+                                    : snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return LeagueWidget(
+                                    id: snapshot.data[index].id,
+                                    name: snapshot.data[index].name,
+                                    logo: snapshot.data[index].logo,
+                                  );
+                                });
+                          } else {
+                            return const Text('Empty data');
+                          }
+                        } else {
+                          return Text('State: ${snapshot.connectionState}');
+                        }
+                      }),
                 ),
                 RowTitleWidget(
                   title: " Live fixtures",
@@ -107,7 +146,11 @@ class Screen1 extends StatelessWidget {
                   ]),
                 ),
                 RowTitleWidget(
-                    title: " Fixtures", widget: Icon(Icons.calendar_month, color: FrontHelpers().gris,)),
+                    title: " Fixtures",
+                    widget: Icon(
+                      Icons.calendar_month,
+                      color: FrontHelpers().gris,
+                    )),
                 SizedBox(
                   height: 10.0,
                 ),

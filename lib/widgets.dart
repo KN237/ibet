@@ -38,16 +38,20 @@ class LeagueRoundedCard extends StatelessWidget {
 
 class LeagueWidget extends StatelessWidget {
   const LeagueWidget({
-    required this.image,
+    required this.id,
+    required this.name,
+    required this.logo,
   });
-  final String image;
+  final int id;
+  final String name;
+  final String logo;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 08.0),
       child: CircleAvatar(
-        child: Image.asset(
-          "assets/images/${image}",
+        child: Image.network(
+          logo,
           width: 50,
         ),
         backgroundColor: FrontHelpers().blanc,
