@@ -26,7 +26,7 @@ class Fixture {
     var fixture = json['fixture'];
     var league = json['league'];
     var score = json['score'];
-    var status2 = json['status'];
+    var status2 = fixture['status'];
     var teams = json['teams'];
     var home = teams['home'];
     var away = teams['away'];
@@ -40,7 +40,7 @@ class Fixture {
     awayName = away['name'];
     awayScore = score['home'];
     awayLogo = away['logo'];
-    status = 'status2';
+    status = status2['short'];
   }
 
   @override

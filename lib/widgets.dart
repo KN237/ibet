@@ -103,11 +103,16 @@ class FixtureWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Center(
-                  child: Text(
-                    leagueName,
-                    style: FrontHelpers().h4.copyWith(
-                        color: FrontHelpers().blanc, fontFamily: "Nexa"),
+                Container(
+                  width: 100,
+                  child: Center(
+                    child: Text(leagueName,
+                        style: FrontHelpers().bodyText.copyWith(
+                            color: FrontHelpers().blanc, fontFamily: "Nexa"),
+                        textAlign: TextAlign.center,
+                        softWrap: false,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip),
                   ),
                 ),
                 Row(
@@ -133,16 +138,26 @@ class FixtureWidget extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                homeName,
-                                style: FrontHelpers().h4.copyWith(
-                                    color: FrontHelpers().blanc,
-                                    fontFamily: "Nexa"),
+                              Container(
+                                width: 70,
+                                child: Text(homeName,
+                                    style: FrontHelpers().bodyText.copyWith(
+                                        color: FrontHelpers().blanc,
+                                        fontFamily: "Nexa"),
+                                    softWrap: false,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade),
                               ),
-                              Text(awayName,
-                                  style: FrontHelpers().h4.copyWith(
-                                      color: FrontHelpers().blanc,
-                                      fontFamily: "Nexa"))
+                              Container(
+                                width: 70,
+                                child: Text(awayName,
+                                    style: FrontHelpers().bodyText.copyWith(
+                                        color: FrontHelpers().blanc,
+                                        fontFamily: "Nexa"),
+                                    softWrap: false,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade),
+                              )
                             ],
                           ),
                           SizedBox(
@@ -150,13 +165,13 @@ class FixtureWidget extends StatelessWidget {
                           ),
                           Column(
                             children: [
-                              Text(homeScore??'0',
+                              Text(homeScore ?? '0',
                                   style: FrontHelpers()
-                                      .h4
+                                      .bodyText
                                       .copyWith(color: FrontHelpers().blanc)),
-                              Text(awayScore??'0',
+                              Text(awayScore ?? '0',
                                   style: FrontHelpers()
-                                      .h4
+                                      .bodyText
                                       .copyWith(color: FrontHelpers().blanc))
                             ],
                           ),

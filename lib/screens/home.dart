@@ -166,7 +166,6 @@ class _Screen1State extends State<Screen1> {
                                     ? 0
                                     : snapshot.data.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  print(snapshot.data);
                                   return FixtureWidget(
                                     id: snapshot.data[index].id,
                                     leagueName: snapshot.data[index].leagueName,

@@ -30,8 +30,6 @@ class ApiHelper {
     List<Fixture> list = [];
     for (int i = 0; i < data.length; i++) {
 
-      print(" ooooh ${data[i]['fixture']['id']}");
-
       var l = Fixture.fromJson(data[i]);
        
       list.add(l);
