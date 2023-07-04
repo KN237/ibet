@@ -1,3 +1,4 @@
+import 'package:Ibet/models/fixtures.dart';
 import 'package:Ibet/screens/fixtures.dart';
 import 'package:Ibet/screens/standings.dart';
 import 'package:flutter/material.dart';
@@ -66,11 +67,13 @@ class Screen1 extends StatefulWidget {
 
 class _Screen1State extends State<Screen1> {
   late Future<List<League>> leagues;
+  late Future<List<Fixture>> lives;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     leagues = ApiHelper().getLeagues();
+    lives = ApiHelper().getLiveFixtures();
   }
 
   @override
@@ -102,7 +105,10 @@ class _Screen1State extends State<Screen1> {
                         print(snapshot.connectionState);
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator( color: FrontHelpers().blanc,));
+                          return Center(
+                              child: CircularProgressIndicator(
+                            color: FrontHelpers().blanc,
+                          ));
                         } else if (snapshot.connectionState ==
                             ConnectionState.done) {
                           if (snapshot.hasError) {
@@ -138,12 +144,49 @@ class _Screen1State extends State<Screen1> {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 3.5,
-                  child: ListView(scrollDirection: Axis.horizontal, children: [
-                    FixtureWidget(),
-                    FixtureWidget(),
-                    FixtureWidget(),
-                    FixtureWidget(),
-                  ]),
+                  child: FutureBuilder(
+                      future: lives,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        print(snapshot.connectionState);
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                              child: CircularProgressIndicator(
+                            color: FrontHelpers().gris,
+                          ));
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.done) {
+                          if (snapshot.hasError) {
+                            return const Text('Error');
+                          } else if (snapshot.hasData) {
+                            return ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot.data.length == null
+                                    ? 0
+                                    : snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  print(snapshot.data);
+                                  return FixtureWidget(
+                                    id: snapshot.data[index].id,
+                                    leagueName: snapshot.data[index].leagueName,
+                                    leagueLogo: snapshot.data[index].leagueLogo,
+                                    homeName: snapshot.data[index].homeName,
+                                    homeLogo: snapshot.data[index].homeLogo,
+                                    homeScore: snapshot.data[index].homeScore,
+                                    awayName: snapshot.data[index].awayName,
+                                    awayLogo: snapshot.data[index].awayLogo,
+                                    awayScore: snapshot.data[index].awayScore,
+                                    status: snapshot.data[index].status,
+                                  );
+                                });
+                          } else {
+                            return const Text('Empty data');
+                          }
+                        } else {
+                          return Text('State: ${snapshot.connectionState}');
+                        }
+                      }),
                 ),
                 RowTitleWidget(
                     title: " Fixtures",

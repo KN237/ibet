@@ -62,9 +62,28 @@ class LeagueWidget extends StatelessWidget {
 }
 
 class FixtureWidget extends StatelessWidget {
-  FixtureWidget({
-    super.key,
-  });
+  FixtureWidget(
+      {super.key,
+      this.id,
+      this.leagueName,
+      this.leagueLogo,
+      this.homeName,
+      this.homeScore,
+      this.homeLogo,
+      this.awayName,
+      this.awayScore,
+      this.awayLogo,
+      this.status});
+  var id;
+  var leagueName;
+  var leagueLogo;
+  var homeName;
+  var homeLogo;
+  var homeScore;
+  var awayName;
+  var awayLogo;
+  var awayScore;
+  var status;
   var r = Random();
   late int tmp = r.nextInt(3);
   @override
@@ -86,7 +105,7 @@ class FixtureWidget extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    "Liga",
+                    leagueName,
                     style: FrontHelpers().h4.copyWith(
                         color: FrontHelpers().blanc, fontFamily: "Nexa"),
                   ),
@@ -94,12 +113,12 @@ class FixtureWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Image.asset(
-                      "assets/images/fcb.png",
+                    Image.network(
+                      homeLogo,
                       width: 50,
                     ),
-                    Image.asset(
-                      "assets/images/bayern.png",
+                    Image.network(
+                      awayLogo,
                       width: 50,
                     ),
                   ],
@@ -115,12 +134,12 @@ class FixtureWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "FC Barcelona",
+                                homeName,
                                 style: FrontHelpers().h4.copyWith(
                                     color: FrontHelpers().blanc,
                                     fontFamily: "Nexa"),
                               ),
-                              Text("Bayern",
+                              Text(awayName,
                                   style: FrontHelpers().h4.copyWith(
                                       color: FrontHelpers().blanc,
                                       fontFamily: "Nexa"))
@@ -131,11 +150,11 @@ class FixtureWidget extends StatelessWidget {
                           ),
                           Column(
                             children: [
-                              Text("0",
+                              Text(homeScore??'0',
                                   style: FrontHelpers()
                                       .h4
                                       .copyWith(color: FrontHelpers().blanc)),
-                              Text("0",
+                              Text(awayScore??'0',
                                   style: FrontHelpers()
                                       .h4
                                       .copyWith(color: FrontHelpers().blanc))
@@ -156,7 +175,7 @@ class FixtureWidget extends StatelessWidget {
                     ),
                     child: Center(
                         child: Text(
-                      "Live",
+                      status,
                       style: FrontHelpers()
                           .h4
                           .copyWith(color: FrontHelpers().gris),
