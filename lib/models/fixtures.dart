@@ -40,7 +40,7 @@ class Fixture {
     awayName = away['name'];
     awayScore = score['home'];
     awayLogo = away['logo'];
-    status = status2['short'];
+    status = status2['long'];
   }
 
   @override

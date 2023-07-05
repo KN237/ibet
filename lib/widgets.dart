@@ -2,6 +2,7 @@ import 'package:Ibet/screens/match.dart';
 import 'package:flutter/material.dart';
 import 'package:Ibet/helpers/frontHelpers.dart';
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class LeagueRoundedCard extends StatelessWidget {
   const LeagueRoundedCard({
@@ -50,10 +51,10 @@ class LeagueWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 08.0),
       child: CircleAvatar(
-        child: Image.network(
-          logo,
-          width: 50,
-        ),
+        child: Image.network(logo, width: 50, errorBuilder:
+            (BuildContext context, Object exception, StackTrace? stackTrace) {
+          return Icon(Icons.hide_image, color: FrontHelpers().gris);
+        }),
         backgroundColor: FrontHelpers().blanc,
         radius: 40,
       ),
@@ -118,14 +119,16 @@ class FixtureWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Image.network(
-                      homeLogo,
-                      width: 50,
-                    ),
-                    Image.network(
-                      awayLogo,
-                      width: 50,
-                    ),
+                    Image.network(homeLogo, width: 50, errorBuilder:
+                        (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                      return Icon(Icons.hide_image, color: FrontHelpers().gris);
+                    }),
+                    Image.network(awayLogo, width: 50, errorBuilder:
+                        (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                      return Icon(Icons.hide_image, color: FrontHelpers().gris);
+                    }),
                   ],
                 ),
                 Padding(
@@ -182,7 +185,7 @@ class FixtureWidget extends StatelessWidget {
                 ),
                 Center(
                   child: Container(
-                    width: MediaQuery.of(context).size.width / 8,
+                    width: MediaQuery.of(context).size.width / 3,
                     height: 25,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
@@ -192,7 +195,7 @@ class FixtureWidget extends StatelessWidget {
                         child: Text(
                       status,
                       style: FrontHelpers()
-                          .h4
+                          .bodyText
                           .copyWith(color: FrontHelpers().gris),
                     )),
                   ),
@@ -207,10 +210,29 @@ class FixtureWidget extends StatelessWidget {
 }
 
 class MatchCard extends StatelessWidget {
-  MatchCard({
-    required this.status,
-  });
-  bool status;
+  MatchCard(
+      {super.key,
+      this.id,
+      this.leagueName,
+      this.leagueLogo,
+      this.homeName,
+      this.homeScore,
+      this.homeLogo,
+      this.awayName,
+      this.awayScore,
+      this.awayLogo,
+      this.status});
+  var id;
+  var leagueName;
+  var leagueLogo;
+  var homeName;
+  var homeLogo;
+  var homeScore;
+  var awayName;
+  var awayLogo;
+  var awayScore;
+  var status;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -222,74 +244,102 @@ class MatchCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Column(
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Image.asset(
-                  "assets/images/fcb.png",
-                  width: 40.0,
-                ),
-                Text(
-                  " Fc Barcelone",
-                  style: FrontHelpers().h3.copyWith(fontFamily: "Nexa"),
-                )
-              ],
-            ),
-            Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Container(
+              width: MediaQuery.of(context).size.width / 3,
+              child: Column(
                 children: [
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    " 0 : 1 ",
-                    style: FrontHelpers()
-                        .h1
-                        .copyWith(color: FrontHelpers().orange),
-                  ),
-                  Text(
-                    "Premiere League",
-                    style: FrontHelpers().bodyText.copyWith(fontFamily: "Nexa"),
+                  Image.network(homeLogo, width: 40.0, errorBuilder:
+                      (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                    return Icon(Icons.hide_image, color: FrontHelpers().gris);
+                  }),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width / 8,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: status == true
-                          ? FrontHelpers().rouge
-                          : FrontHelpers().gris,
+                    width: 100,
+                    child: Text(
+                      homeName,
+                      style:
+                          FrontHelpers().bodyText.copyWith(fontFamily: "Nexa"),
+                      softWrap: false,
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
                     ),
-                    child: Center(
-                        child: Text(
-                      "Live",
+                  )
+                ],
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width / 3,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      " ${homeScore ?? '0'} : ${awayScore ?? '0'} ",
                       style: FrontHelpers()
-                          .h4
-                          .copyWith(color: FrontHelpers().blanc),
-                    )),
-                  ),
+                          .h1
+                          .copyWith(color: FrontHelpers().orange),
+                    ),
+                    Container(
+                      width: 100,
+                      child: Text(
+                        leagueName,
+                        style: FrontHelpers()
+                            .bodyText
+                            .copyWith(fontFamily: "Nexa"),
+                        softWrap: false,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: FrontHelpers().gris,
+                      ),
+                      child: Center(
+                          child: Text(
+                        status,
+                        style: FrontHelpers()
+                            .bodyText
+                            .copyWith(color: FrontHelpers().blanc),
+                      )),
+                    ),
+                    SizedBox(
+                      height: 01,
+                    ),
+                  ]),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width / 3,
+              child: Column(
+                children: [
                   SizedBox(
-                    height: 01,
+                    height: 10,
                   ),
-                ]),
-            SizedBox(),
-            SizedBox(),
-            Column(
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Image.asset(
-                  "assets/images/bayern.png",
-                  width: 40.0,
-                ),
-                Text(
-                  "Bayern",
-                  style: FrontHelpers().h3.copyWith(fontFamily: "Nexa"),
-                )
-              ],
+                  Image.network(awayLogo, width: 40.0, errorBuilder:
+                      (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                    return Icon(Icons.hide_image, color: FrontHelpers().gris);
+                  }),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    awayName,
+                    style: FrontHelpers().bodyText.copyWith(fontFamily: "Nexa"),
+                  )
+                ],
+              ),
             )
           ],
         ),
@@ -327,30 +377,30 @@ class RowTitleWidget extends StatelessWidget {
               ),
             ],
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Match();
-              }));
-            },
-            child: Row(
-              textBaseline: TextBaseline.alphabetic,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "View all",
-                  style: FrontHelpers().h3.copyWith(fontFamily: "Nexa"),
-                ),
-                SizedBox(
-                  width: 03,
-                ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: FrontHelpers().h2.fontSize,
-                ),
-              ],
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //       return Match();
+          //     }));
+          //   },
+          //   child: Row(
+          //     textBaseline: TextBaseline.alphabetic,
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Text(
+          //         "View all",
+          //         style: FrontHelpers().h3.copyWith(fontFamily: "Nexa"),
+          //       ),
+          //       SizedBox(
+          //         width: 03,
+          //       ),
+          //       Icon(
+          //         Icons.arrow_forward_ios,
+          //         size: FrontHelpers().h2.fontSize,
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
