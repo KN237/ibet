@@ -26,7 +26,6 @@ class ApiHelper {
     return leagueList;
   }
 
-
   Future<List<Fixture>> getLastFixtures() async {
     var url = Uri.parse('https://v3.football.api-sports.io/fixtures?last=30');
     var res = await http.get(url,
@@ -36,12 +35,21 @@ class ApiHelper {
     return leagueList;
   }
 
+  Future<Fixture> getFixture(dynamic id) async {
+    var url = Uri.parse('https://v3.football.api-sports.io/fixtures?id=$id');
+    var res = await http.get(url,
+        headers: {'x-apisports-key': 'efa9310906b47656da968f6804d26a70'});
+    final responseJson = json.decode(res.body);
+    Fixture leagueList = Fixture.fromJson(responseJson["response"][0]);
+    
+    return leagueList;
+  }
+
   List<Fixture> createFixtureList(List data) {
     List<Fixture> list = [];
     for (int i = 0; i < data.length; i++) {
-
       var l = Fixture.fromJson(data[i]);
-       
+
       list.add(l);
     }
 

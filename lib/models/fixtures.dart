@@ -9,6 +9,8 @@ class Fixture {
   var awayLogo;
   var awayScore;
   var status;
+   var round;
+
 
   Fixture(
       {id,
@@ -20,19 +22,19 @@ class Fixture {
       awayName,
       awayScore,
       awayLogo,
-      status});
+      status,round});
 
   Fixture.fromJson(Map<String, dynamic> json) {
     var fixture = json['fixture'];
     var league = json['league'];
-    var score = json['score'];
+    var score = json['goals'];
     var status2 = fixture['status'];
     var teams = json['teams'];
     var home = teams['home'];
     var away = teams['away'];
 
     id = fixture['id'];
-    leagueName = league['name']; print("id  $id");
+    leagueName = league['name']; 
     leagueLogo = league['logo'];
     homeName = home['name'];
     homeScore = score['home'];
@@ -41,6 +43,7 @@ class Fixture {
     awayScore = score['home'];
     awayLogo = away['logo'];
     status = status2['long'];
+    round = league['round'];
   }
 
   @override

@@ -85,8 +85,8 @@ class FixtureWidget extends StatelessWidget {
   var awayLogo;
   var awayScore;
   var status;
-  var r = Random();
-  late int tmp = r.nextInt(3);
+  // var r = Random();
+  // late int tmp = r.nextInt(3);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -168,11 +168,11 @@ class FixtureWidget extends StatelessWidget {
                           ),
                           Column(
                             children: [
-                              Text(homeScore ?? '0',
+                              Text(homeScore.toString() ?? '0',
                                   style: FrontHelpers()
                                       .bodyText
                                       .copyWith(color: FrontHelpers().blanc)),
-                              Text(awayScore ?? '0',
+                              Text(awayScore.toString() ?? '0',
                                   style: FrontHelpers()
                                       .bodyText
                                       .copyWith(color: FrontHelpers().blanc))
@@ -235,62 +235,40 @@ class MatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 03.0),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width -
-            (MediaQuery.of(context).size.width / 20),
-        height: 100.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Image.network(homeLogo, width: 40.0, errorBuilder:
-                      (BuildContext context, Object exception,
-                          StackTrace? stackTrace) {
-                    return Icon(Icons.hide_image, color: FrontHelpers().gris);
-                  }),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: 100,
-                    child: Text(
-                      homeName,
-                      style:
-                          FrontHelpers().bodyText.copyWith(fontFamily: "Nexa"),
-                      softWrap: false,
-                      maxLines: 1,
-                      overflow: TextOverflow.clip,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Match(id: id);
+        }));
+      },
+      child: Card(
+        margin: EdgeInsets.symmetric(vertical: 03.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width -
+              (MediaQuery.of(context).size.width / 20),
+          height: 100.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width / 3,
+                child: Column(
                   children: [
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      " ${homeScore ?? '0'} : ${awayScore ?? '0'} ",
-                      style: FrontHelpers()
-                          .h1
-                          .copyWith(color: FrontHelpers().orange),
+                    Image.network(homeLogo, width: 40.0, errorBuilder:
+                        (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                      return Icon(Icons.hide_image, color: FrontHelpers().gris);
+                    }),
+                    SizedBox(
+                      height: 10,
                     ),
                     Container(
                       width: 100,
                       child: Text(
-                        leagueName,
+                        homeName,
                         style: FrontHelpers()
                             .bodyText
                             .copyWith(fontFamily: "Nexa"),
@@ -298,50 +276,81 @@ class MatchCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.clip,
                       ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: FrontHelpers().gris,
-                      ),
-                      child: Center(
-                          child: Text(
-                        status,
-                        style: FrontHelpers()
-                            .bodyText
-                            .copyWith(color: FrontHelpers().blanc),
-                      )),
-                    ),
-                    SizedBox(
-                      height: 01,
-                    ),
-                  ]),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Image.network(awayLogo, width: 40.0, errorBuilder:
-                      (BuildContext context, Object exception,
-                          StackTrace? stackTrace) {
-                    return Icon(Icons.hide_image, color: FrontHelpers().gris);
-                  }),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    awayName,
-                    style: FrontHelpers().bodyText.copyWith(fontFamily: "Nexa"),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            )
-          ],
+              Container(
+                width: MediaQuery.of(context).size.width / 3,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        " ${homeScore ?? '0'} : ${awayScore ?? '0'} ",
+                        style: FrontHelpers()
+                            .h1
+                            .copyWith(color: FrontHelpers().orange),
+                      ),
+                      Container(
+                        width: 100,
+                        child: Text(
+                          leagueName,
+                          style: FrontHelpers()
+                              .bodyText
+                              .copyWith(fontFamily: "Nexa"),
+                          softWrap: false,
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 25,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: FrontHelpers().gris,
+                        ),
+                        child: Center(
+                            child: Text(
+                          status,
+                          style: FrontHelpers()
+                              .bodyText
+                              .copyWith(color: FrontHelpers().blanc),
+                        )),
+                      ),
+                      SizedBox(
+                        height: 01,
+                      ),
+                    ]),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 3,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Image.network(awayLogo, width: 40.0, errorBuilder:
+                        (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                      return Icon(Icons.hide_image, color: FrontHelpers().gris);
+                    }),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      awayName,
+                      style:
+                          FrontHelpers().bodyText.copyWith(fontFamily: "Nexa"),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
