@@ -109,7 +109,6 @@ class _MatchState extends State<Match> {
                     );
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasError) {
-                      print(snapshot.data);
                       return const Text('Error');
                     } else if (snapshot.hasData) {
                       return Column(
@@ -170,13 +169,19 @@ class _MatchState extends State<Match> {
                                         SizedBox(
                                           height: 20.0,
                                         ),
-                                        Text(
-                                          snapshot.data.homeName,
-                                          style: FrontHelpers()
-                                              .bodyText
-                                              .copyWith(
-                                                  color: FrontHelpers().blanc,
-                                                  fontFamily: "Nexa"),
+                                        Container(
+                                          width: 100,
+                                          child: Text(
+                                            snapshot.data.homeName,
+                                            style: FrontHelpers()
+                                                .bodyText
+                                                .copyWith(
+                                                    color: FrontHelpers().blanc,
+                                                    fontFamily: "Nexa"),
+                                            softWrap: false,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.clip,
+                                          ),
                                         )
                                       ],
                                     ),
@@ -214,13 +219,19 @@ class _MatchState extends State<Match> {
                                         SizedBox(
                                           height: 20.0,
                                         ),
-                                        Text(
-                                          snapshot.data.awayName,
-                                          style: FrontHelpers()
-                                              .bodyText
-                                              .copyWith(
-                                                  color: FrontHelpers().blanc,
-                                                  fontFamily: "Nexa"),
+                                        Container(
+                                          width: 100,
+                                          child: Text(
+                                            snapshot.data.awayName,
+                                            style: FrontHelpers()
+                                                .bodyText
+                                                .copyWith(
+                                                    color: FrontHelpers().blanc,
+                                                    fontFamily: "Nexa"),
+                                            softWrap: false,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.clip,
+                                          ),
                                         )
                                       ],
                                     ),

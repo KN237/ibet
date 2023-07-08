@@ -267,14 +267,16 @@ class MatchCard extends StatelessWidget {
                     ),
                     Container(
                       width: 100,
-                      child: Text(
-                        homeName,
-                        style: FrontHelpers()
-                            .bodyText
-                            .copyWith(fontFamily: "Nexa"),
-                        softWrap: false,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
+                      child: Center(
+                        child: Text(
+                          homeName,
+                          style: FrontHelpers()
+                              .bodyText
+                              .copyWith(fontFamily: "Nexa"),
+                          softWrap: false,
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
                       ),
                     )
                   ],
@@ -296,14 +298,16 @@ class MatchCard extends StatelessWidget {
                       ),
                       Container(
                         width: 100,
-                        child: Text(
-                          leagueName,
-                          style: FrontHelpers()
-                              .bodyText
-                              .copyWith(fontFamily: "Nexa"),
-                          softWrap: false,
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
+                        child: Center(
+                          child: Text(
+                            leagueName,
+                            style: FrontHelpers()
+                                .bodyText
+                                .copyWith(fontFamily: "Nexa"),
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.clip,
+                          ),
                         ),
                       ),
                       Container(
@@ -341,10 +345,19 @@ class MatchCard extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      awayName,
-                      style:
-                          FrontHelpers().bodyText.copyWith(fontFamily: "Nexa"),
+                    Container(
+                      width: 100,
+                      child: Center(
+                        child: Text(
+                          awayName,
+                          style: FrontHelpers()
+                              .bodyText
+                              .copyWith(fontFamily: "Nexa"),
+                          softWrap: false,
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
                     )
                   ],
                 ),
