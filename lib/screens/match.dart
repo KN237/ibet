@@ -1,4 +1,5 @@
 import 'package:Ibet/helpers/apiHelpers.dart';
+import 'package:Ibet/models/event.dart';
 import 'package:Ibet/models/fixtures.dart';
 import 'package:flutter/material.dart';
 import 'package:Ibet/helpers/frontHelpers.dart';
@@ -14,6 +15,7 @@ class Match extends StatefulWidget {
 
 class _MatchState extends State<Match> {
   late Future<Fixture> match;
+  late Future<List<Eventt>> events;
   var appBarText;
   List<Widget> event = [
     FixtureEvent(),
@@ -21,6 +23,25 @@ class _MatchState extends State<Match> {
     FixtureEvent(),
     FixtureEvent(),
   ];
+  Widget getEventWidget(List<Eventt> l) {
+    List<Widget> w = [];
+    for (var i = 0; i < l.length; i++) {
+      w.add(FixtureEvent(
+        teamLogo: l[i].teamLogo,
+        teamName: l[i].teamName,
+        time: l[i].time,
+        eventType: l[i].type,
+        eventSubType: l[i].subtype,
+        playerName: l[i].playerName,
+        assistName: l[i].assistName,
+      ));
+    }
+
+    return Column(
+      children: w,
+    );
+  }
+
   void getAppBarText() async {
     Fixture newMatch = await ApiHelper().getFixture(widget.id);
     appBarText = "${newMatch.homeName} VS ${newMatch.awayName}";
@@ -31,6 +52,7 @@ class _MatchState extends State<Match> {
     // TODO: implement initState
     super.initState();
     match = ApiHelper().getFixture(widget.id);
+    events = ApiHelper().getEvent(widget.id);
     getAppBarText();
   }
 
@@ -38,6 +60,7 @@ class _MatchState extends State<Match> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -53,20 +76,14 @@ class _MatchState extends State<Match> {
             future: match,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      '...',
-                      style: FrontHelpers().h3.copyWith(fontFamily: "Nexa"),
-                    ),
-                  ),
+                return Text(
+                  '...',
+                  style: FrontHelpers().h3.copyWith(fontFamily: "Nexa"),
                 );
               } else if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
                   print(snapshot.data);
-                  return const Text('Error');
+                  return Center(child: Text('Error'));
                 } else if (snapshot.hasData) {
                   return Text(
                     "${snapshot.data.homeName} VS ${snapshot.data.awayName}",
@@ -86,13 +103,12 @@ class _MatchState extends State<Match> {
                 return Text('State: ${snapshot.connectionState}');
               }
             }),
-        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: event.length * 100 + MediaQuery.of(context).size.height,
+            height: event.length * 350 + MediaQuery.of(context).size.height,
             child: FutureBuilder(
                 future: match,
                 builder:
@@ -361,9 +377,81 @@ class _MatchState extends State<Match> {
                                   ),
                                   Container(
                                     color: FrontHelpers().blanc,
-                                    child: Column(
-                                      children: event,
-                                    ),
+                                    child: FutureBuilder(
+                                        future: events,
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<dynamic> snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                              child: CircularProgressIndicator(color: FrontHelpers().gris,),
+                                            );
+                                          } else if (snapshot.connectionState ==
+                                              ConnectionState.done) {
+                                            if (snapshot.hasError) {
+                                              return Container(
+                                                height: 10,
+                                                color: FrontHelpers().blanc,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 20.0),
+                                                  child: Align(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      child: Text(
+                                                        "There was an error ! Please try again later.",
+                                                        style: FrontHelpers()
+                                                            .h3
+                                                            .copyWith(
+                                                                color:
+                                                                    FrontHelpers()
+                                                                        .gris,
+                                                                fontFamily:
+                                                                    "Nexa"),
+                                                      )),
+                                                ),
+                                              );
+                                            } else if (snapshot.hasData) {
+                                              return getEventWidget(
+                                                  snapshot.data);
+                                            } else {
+                                              return Container(
+                                                height: 10,
+                                                color: FrontHelpers().blanc,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 20.0),
+                                                  child: Align(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      child: Text(
+                                                        "There's nothing to display now !",
+                                                        style: FrontHelpers()
+                                                            .h3
+                                                            .copyWith(
+                                                                color:
+                                                                    FrontHelpers()
+                                                                        .gris,
+                                                                fontFamily:
+                                                                    "Nexa"),
+                                                      )),
+                                                ),
+                                              );
+                                            }
+                                          } else {
+                                            return Text(
+                                                'State: ${snapshot.connectionState}',style: FrontHelpers()
+                                                            .h3
+                                                            .copyWith(
+                                                                color:
+                                                                    FrontHelpers()
+                                                                        .gris,
+                                                                fontFamily:
+                                                                    "Nexa"));
+                                          }
+                                        }),
                                   ),
                                 ],
                                 onChange: (index) => print(index),
@@ -427,6 +515,23 @@ class Characteristique extends StatelessWidget {
 }
 
 class FixtureEvent extends StatelessWidget {
+  FixtureEvent(
+      {this.teamLogo,
+      this.teamName,
+      this.playerName,
+      this.eventType,
+      this.eventSubType,
+      this.time,
+      this.assistName});
+
+  var teamLogo;
+  var teamName;
+  var playerName;
+  var eventType;
+  var eventSubType;
+  var time;
+  var assistName;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -441,14 +546,15 @@ class FixtureEvent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.network(
-                  "networks/images/fcb.png",
-                  width: 15,
-                ),
+                Image.network(teamLogo, width: 15, errorBuilder:
+                    (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                  return Icon(Icons.hide_image, color: FrontHelpers().gris);
+                }),
                 SizedBox(
                   width: 05,
                 ),
-                Text("FC Barcelone"),
+                Text(teamName),
               ],
             ),
             SizedBox(
@@ -466,11 +572,11 @@ class FixtureEvent extends StatelessWidget {
                         textBaseline: TextBaseline.alphabetic,
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         children: [
-                          Text("Goal"),
+                          Text(eventType),
                           SizedBox(
                             height: 15,
                           ),
-                          Text("L. Diaz"),
+                          Text(playerName),
                         ],
                       ),
                     ],
@@ -488,7 +594,7 @@ class FixtureEvent extends StatelessWidget {
                             color: FrontHelpers().rouge),
                         child: Center(
                           child: Text(
-                            "12",
+                            time.toString(),
                             style: FrontHelpers()
                                 .bodyText
                                 .copyWith(color: FrontHelpers().blanc),
@@ -498,7 +604,16 @@ class FixtureEvent extends StatelessWidget {
                       SizedBox(
                         height: 15,
                       ),
-                      Icon(Icons.sports_soccer),
+                      eventSubType.toString().contains('ellow')
+                          ? Icon(
+                              Icons.style,
+                              color: Colors.yellow,
+                            )
+                          : eventSubType.toString().contains('ed')
+                              ? Icon(Icons.style, color: Colors.red)
+                              : eventSubType.toString().contains('ub')
+                                  ? Icon(Icons.change_circle,)
+                                  : Icon(Icons.sports_soccer),
                     ],
                   ),
                 ),
@@ -508,11 +623,11 @@ class FixtureEvent extends StatelessWidget {
                     textBaseline: TextBaseline.alphabetic,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("Normal Goal"),
+                      Text(eventSubType),
                       SizedBox(
                         height: 15,
                       ),
-                      Text("Assist: Firmino"),
+                      Text("Assist: $assistName"),
                     ],
                   ),
                 ),

@@ -43,7 +43,7 @@ class LeagueWidget extends StatelessWidget {
     required this.name,
     required this.logo,
   });
-  final int id;
+  final String id;
   final String name;
   final String logo;
   @override

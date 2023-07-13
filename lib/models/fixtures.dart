@@ -1,3 +1,6 @@
+
+import 'package:Ibet/models/event.dart';
+
 class Fixture {
   var id;
   var leagueName;
@@ -9,8 +12,7 @@ class Fixture {
   var awayLogo;
   var awayScore;
   var status;
-   var round;
-
+  var round;
 
   Fixture(
       {id,
@@ -22,28 +24,21 @@ class Fixture {
       awayName,
       awayScore,
       awayLogo,
-      status,round});
+      status,
+      round});
 
   Fixture.fromJson(Map<String, dynamic> json) {
-    var fixture = json['fixture'];
-    var league = json['league'];
-    var score = json['goals'];
-    var status2 = fixture['status'];
-    var teams = json['teams'];
-    var home = teams['home'];
-    var away = teams['away'];
-
-    id = fixture['id'];
-    leagueName = league['name']; 
-    leagueLogo = league['logo'];
-    homeName = home['name'];
-    homeScore = score['home'];
-    homeLogo = home['logo'];
-    awayName = away['name'];
-    awayScore = score['home'];
-    awayLogo = away['logo'];
-    status = status2['long'];
-    round = league['round'];
+    id = json['match_id'];
+    leagueName = json['league_name'];
+    leagueLogo = json['league_logo'];
+    homeName = json['match_hometeam_name'];
+    homeScore = json['match_hometeam_score'];
+    homeLogo = json['team_home_badge'];
+    awayName = json['match_awayteam_name'];
+    awayScore = json['match_awayteam_score'];
+    awayLogo = json['team_away_badge'];
+    status = json['match_status'];
+    round = json['match_date'];
   }
 
   @override
