@@ -428,3 +428,164 @@ class RowTitleWidget extends StatelessWidget {
     );
   }
 }
+
+
+
+class Characteristique extends StatelessWidget {
+  Characteristique({
+    required this.team1,
+    required this.team2,
+    required this.title,
+  });
+
+  String team1;
+  String team2;
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(team1),
+          SizedBox(
+            width: 05,
+          ),
+          Text(title),
+          SizedBox(
+            width: 05,
+          ),
+          Text(team2),
+        ],
+      ),
+    );
+  }
+}
+
+class FixtureEvent extends StatelessWidget {
+  FixtureEvent(
+      {this.teamLogo,
+      this.teamName,
+      this.playerName,
+      this.eventType,
+      this.eventSubType,
+      this.time,
+      this.assistName});
+
+  var teamLogo;
+  var teamName;
+  var playerName;
+  var eventType;
+  var eventSubType;
+  var time;
+  var assistName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 03.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width -
+            (MediaQuery.of(context).size.width / 20),
+        height: 100.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(teamLogo, width: 15, errorBuilder:
+                    (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                  return Icon(Icons.hide_image, color: FrontHelpers().gris);
+                }),
+                SizedBox(
+                  width: 05,
+                ),
+                Text(teamName),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        textBaseline: TextBaseline.alphabetic,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        children: [
+                          Text(eventType),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Text(playerName),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 9,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: FrontHelpers().rouge),
+                        child: Center(
+                          child: Text(
+                            time.toString(),
+                            style: FrontHelpers()
+                                .bodyText
+                                .copyWith(color: FrontHelpers().blanc),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      eventSubType.toString().contains('ellow')
+                          ? Icon(
+                              Icons.style,
+                              color: Colors.yellow,
+                            )
+                          : eventSubType.toString().contains('ed')
+                              ? Icon(Icons.style, color: Colors.red)
+                              : eventSubType.toString().contains('ub')
+                                  ? Icon(Icons.change_circle,)
+                                  : Icon(Icons.sports_soccer),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  child: Column(
+                    textBaseline: TextBaseline.alphabetic,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(eventSubType),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text("Assist: $assistName"),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

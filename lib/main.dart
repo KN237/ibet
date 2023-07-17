@@ -2,6 +2,7 @@ import 'package:Ibet/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '/helpers/frontHelpers.dart';
+import 'screens/lineup.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: Theme.of(context).copyWith(
           colorScheme:
               ColorScheme.fromSwatch().copyWith(secondary: FrontHelpers().blanc)),
-      home: Home(),
+      home: Lineup(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:Ibet/helpers/apiHelpers.dart';
 import 'package:Ibet/models/event.dart';
 import 'package:Ibet/models/fixtures.dart';
+import 'package:Ibet/screens/lineup.dart';
 import 'package:flutter/material.dart';
 import 'package:Ibet/helpers/frontHelpers.dart';
 import 'package:Ibet/widgets.dart';
@@ -16,6 +17,7 @@ class Match extends StatefulWidget {
 class _MatchState extends State<Match> {
   late Future<Fixture> match;
   late Future<List<Eventt>> events;
+  late Future<List<Characteristique>> stats;
   var appBarText;
   List<Widget> event = [
     FixtureEvent(),
@@ -53,6 +55,7 @@ class _MatchState extends State<Match> {
     super.initState();
     match = ApiHelper().getFixture(widget.id);
     events = ApiHelper().getEvent(widget.id);
+    stats = ApiHelper().getStatistic(widget.id);
     getAppBarText();
   }
 
@@ -108,7 +111,7 @@ class _MatchState extends State<Match> {
         child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: event.length * 350 + MediaQuery.of(context).size.height,
+            height: event.length * 300 + MediaQuery.of(context).size.height,
             child: FutureBuilder(
                 future: match,
                 builder:
@@ -286,7 +289,6 @@ class _MatchState extends State<Match> {
                                     indicatorColor: FrontHelpers().gris),
                                 tabs: [
                                   Text('Statistics'),
-                                  Text('Lineups'),
                                   Text("Events")
                                 ],
                                 views: [
@@ -348,32 +350,101 @@ class _MatchState extends State<Match> {
                                           ),
                                         ],
                                       ),
-                                      Characteristique(
-                                        team1: "12",
-                                        team2: "2",
-                                        title: "Shots on Goals",
+                                      Container(
+                                        child: FutureBuilder(
+                                            future: stats,
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<dynamic>
+                                                    snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: FrontHelpers().gris,
+                                                  ),
+                                                );
+                                              } else if (snapshot
+                                                      .connectionState ==
+                                                  ConnectionState.done) {
+                                                if (snapshot.hasError) {
+                                                  return Container(
+                                                    height: 10,
+                                                    color: FrontHelpers().blanc,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 20.0),
+                                                      child: Align(
+                                                          alignment: Alignment
+                                                              .topCenter,
+                                                          child: Text(
+                                                            "There was an error ! Please try again later.",
+                                                            style: FrontHelpers()
+                                                                .h3
+                                                                .copyWith(
+                                                                    color:
+                                                                        FrontHelpers()
+                                                                            .gris,
+                                                                    fontFamily:
+                                                                        "Nexa"),
+                                                          )),
+                                                    ),
+                                                  );
+                                                } else if (snapshot.hasData) {
+                                                  return Column(
+                                                    children: snapshot.data,
+                                                  );
+                                                } else {
+                                                  return Container(
+                                                    height: 10,
+                                                    color: FrontHelpers().blanc,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 20.0),
+                                                      child: Align(
+                                                          alignment: Alignment
+                                                              .topCenter,
+                                                          child: Text(
+                                                            "There's nothing to display now !",
+                                                            style: FrontHelpers()
+                                                                .h3
+                                                                .copyWith(
+                                                                    color:
+                                                                        FrontHelpers()
+                                                                            .gris,
+                                                                    fontFamily:
+                                                                        "Nexa"),
+                                                          )),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                return Text(
+                                                    'State: ${snapshot.connectionState}',
+                                                    style: FrontHelpers()
+                                                        .h3
+                                                        .copyWith(
+                                                            color:
+                                                                FrontHelpers()
+                                                                    .gris,
+                                                            fontFamily:
+                                                                "Nexa"));
+                                              }
+                                            }),
                                       ),
-                                      Characteristique(
-                                        team1: "12",
-                                        team2: "2",
-                                        title: "Shots of Goals",
-                                      ),
+                                      // Characteristique(
+                                      //   team1: "12",
+                                      //   team2: "2",
+                                      //   title: "Shots on Goals",
+                                      // ),
+                                      // Characteristique(
+                                      //   team1: "12",
+                                      //   team2: "2",
+                                      //   title: "Shots of Goals",
+                                      // ),
                                     ]),
-                                  ),
-                                  Container(
-                                    height: 10,
-                                    color: FrontHelpers().blanc,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 20.0),
-                                      child: Align(
-                                          alignment: Alignment.topCenter,
-                                          child: Text(
-                                            "Available soon",
-                                            style: FrontHelpers().h3.copyWith(
-                                                color: FrontHelpers().gris,
-                                                fontFamily: "Nexa"),
-                                          )),
-                                    ),
                                   ),
                                   Container(
                                     color: FrontHelpers().blanc,
@@ -384,7 +455,9 @@ class _MatchState extends State<Match> {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
                                             return Center(
-                                              child: CircularProgressIndicator(color: FrontHelpers().gris,),
+                                              child: CircularProgressIndicator(
+                                                color: FrontHelpers().gris,
+                                              ),
                                             );
                                           } else if (snapshot.connectionState ==
                                               ConnectionState.done) {
@@ -442,14 +515,13 @@ class _MatchState extends State<Match> {
                                             }
                                           } else {
                                             return Text(
-                                                'State: ${snapshot.connectionState}',style: FrontHelpers()
-                                                            .h3
-                                                            .copyWith(
-                                                                color:
-                                                                    FrontHelpers()
-                                                                        .gris,
-                                                                fontFamily:
-                                                                    "Nexa"));
+                                                'State: ${snapshot.connectionState}',
+                                                style: FrontHelpers()
+                                                    .h3
+                                                    .copyWith(
+                                                        color:
+                                                            FrontHelpers().gris,
+                                                        fontFamily: "Nexa"));
                                           }
                                         }),
                                   ),
@@ -475,165 +547,6 @@ class _MatchState extends State<Match> {
                   }
                 }),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class Characteristique extends StatelessWidget {
-  Characteristique({
-    required this.team1,
-    required this.team2,
-    required this.title,
-  });
-
-  String team1;
-  String team2;
-  String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(team1),
-          SizedBox(
-            width: 05,
-          ),
-          Text(title),
-          SizedBox(
-            width: 05,
-          ),
-          Text(team2),
-        ],
-      ),
-    );
-  }
-}
-
-class FixtureEvent extends StatelessWidget {
-  FixtureEvent(
-      {this.teamLogo,
-      this.teamName,
-      this.playerName,
-      this.eventType,
-      this.eventSubType,
-      this.time,
-      this.assistName});
-
-  var teamLogo;
-  var teamName;
-  var playerName;
-  var eventType;
-  var eventSubType;
-  var time;
-  var assistName;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 03.0),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width -
-            (MediaQuery.of(context).size.width / 20),
-        height: 100.0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.network(teamLogo, width: 15, errorBuilder:
-                    (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                  return Icon(Icons.hide_image, color: FrontHelpers().gris);
-                }),
-                SizedBox(
-                  width: 05,
-                ),
-                Text(teamName),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        textBaseline: TextBaseline.alphabetic,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        children: [
-                          Text(eventType),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(playerName),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 9,
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: FrontHelpers().rouge),
-                        child: Center(
-                          child: Text(
-                            time.toString(),
-                            style: FrontHelpers()
-                                .bodyText
-                                .copyWith(color: FrontHelpers().blanc),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      eventSubType.toString().contains('ellow')
-                          ? Icon(
-                              Icons.style,
-                              color: Colors.yellow,
-                            )
-                          : eventSubType.toString().contains('ed')
-                              ? Icon(Icons.style, color: Colors.red)
-                              : eventSubType.toString().contains('ub')
-                                  ? Icon(Icons.change_circle,)
-                                  : Icon(Icons.sports_soccer),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: Column(
-                    textBaseline: TextBaseline.alphabetic,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(eventSubType),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text("Assist: $assistName"),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          ],
         ),
       ),
     );
