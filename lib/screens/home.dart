@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:Ibet/helpers/frontHelpers.dart';
 import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
 import 'package:Ibet/widgets.dart';
-import 'package:http/http.dart' as http;
 import '../helpers/apiHelpers.dart';
 import '../models/league.dart';
 
@@ -102,6 +101,9 @@ class _Screen1State extends State<Screen1> {
                         topLeft: Radius.circular(50),
                         bottomLeft: Radius.circular(50)),
                   ),
+
+                  // DEBUT LISTE DE LEAGUES PAGE PRINCIPALE
+
                   child: FutureBuilder(
                       future: leagues,
                       builder: (BuildContext context,
@@ -115,20 +117,9 @@ class _Screen1State extends State<Screen1> {
                         } else if (snapshot.connectionState ==
                             ConnectionState.done) {
                           if (snapshot.hasError) {
-                            return const Text('Error');
+                            return _buildErrorW(snapshot);
                           } else if (snapshot.hasData) {
-                            return ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: snapshot.data.length == null
-                                    ? 0
-                                    : snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return LeagueWidget(
-                                    id: snapshot.data[index].id,
-                                    name: snapshot.data[index].name,
-                                    logo: snapshot.data[index].logo,
-                                  );
-                                });
+                            return _buildLeagues(snapshot: snapshot);
                           } else {
                             return GestureDetector(
                                 onTap: () {
@@ -140,10 +131,15 @@ class _Screen1State extends State<Screen1> {
                                 ));
                           }
                         } else {
-                          return Text('State: ${snapshot.connectionState}');
+                          return _buildErrorW(snapshot);
                         }
                       }),
                 ),
+
+                // FIN LISTE DE LEAGUES PAGE PRINCIPALE
+
+                // DEBUT TITRE SECTION
+
                 RowTitleWidget(
                   title: " Live fixtures",
                   widget: Image.asset(
@@ -151,6 +147,10 @@ class _Screen1State extends State<Screen1> {
                     width: 20,
                   ),
                 ),
+
+                // FIN TITRE SECTION
+
+                // DEBUT LIVESCORE
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 3.5,
@@ -167,42 +167,21 @@ class _Screen1State extends State<Screen1> {
                         } else if (snapshot.connectionState ==
                             ConnectionState.done) {
                           if (snapshot.hasError) {
-                            return const Text('Error');
+                            return _buildError(snapshot);
                           } else if (snapshot.hasData) {
-                            return ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: snapshot.data.length == null
-                                    ? 0
-                                    : snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return FixtureWidget(
-                                    id: snapshot.data[index].id,
-                                    leagueName: snapshot.data[index].leagueName,
-                                    leagueLogo: snapshot.data[index].leagueLogo,
-                                    homeName: snapshot.data[index].homeName,
-                                    homeLogo: snapshot.data[index].homeLogo,
-                                    homeScore: snapshot.data[index].homeScore,
-                                    awayName: snapshot.data[index].awayName,
-                                    awayLogo: snapshot.data[index].awayLogo,
-                                    awayScore: snapshot.data[index].awayScore,
-                                    status: snapshot.data[index].status,
-                                  );
-                                });
+                            return _buildLiveScore(snapshot: snapshot);
                           } else {
-                            return GestureDetector(
-                                onTap: () {
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.rotate_right,
-                                  color: FrontHelpers().gris,
-                                ));
+                            return _buildError(snapshot);
                           }
                         } else {
-                          return Text('State: ${snapshot.connectionState}');
+                          return _buildError(snapshot);
                         }
                       }),
                 ),
+
+                // FIN LIVESCORE
+
+                // DEBUT TITRE SECTION
                 RowTitleWidget(
                     title: " Fixtures",
                     widget: Icon(
@@ -212,6 +191,10 @@ class _Screen1State extends State<Screen1> {
                 SizedBox(
                   height: 10.0,
                 ),
+
+                // FIN TITRE SECTION
+
+                // DEBUT FIXTURES
                 Flexible(
                   child: FutureBuilder(
                       future: last,
@@ -226,47 +209,132 @@ class _Screen1State extends State<Screen1> {
                         } else if (snapshot.connectionState ==
                             ConnectionState.done) {
                           if (snapshot.hasError) {
-                            return const Text('Error');
+                            return _buildError(snapshot);
                           } else if (snapshot.hasData) {
-                            return ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                itemCount: snapshot.data.length == null
-                                    ? 0
-                                    : snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return MatchCard(
-                                    id: snapshot.data[index].id,
-                                    leagueName: snapshot.data[index].leagueName,
-                                    leagueLogo: snapshot.data[index].leagueLogo,
-                                    homeName: snapshot.data[index].homeName,
-                                    homeLogo: snapshot.data[index].homeLogo,
-                                    homeScore: snapshot.data[index].homeScore,
-                                    awayName: snapshot.data[index].awayName,
-                                    awayLogo: snapshot.data[index].awayLogo,
-                                    awayScore: snapshot.data[index].awayScore,
-                                    status: snapshot.data[index].status,
-                                  );
-                                });
+                            return _buildFixtures(snapshot: snapshot);
                           } else {
-                            return GestureDetector(
-                                onTap: () {
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.rotate_right,
-                                  color: FrontHelpers().gris,
-                                ));
+                            return _buildError(snapshot);
                           }
                         } else {
-                          return Text('State: ${snapshot.connectionState}');
+                          return _buildError(snapshot);
                         }
                       }),
                 )
+
+                // FIN FIXTURES
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  GestureDetector _buildError(AsyncSnapshot<dynamic> snapshot) {
+    return GestureDetector(
+        onTap: () {
+          snapshot.inState(ConnectionState.none);
+          setState(() {});
+        },
+        child: Center(
+          child: Icon(
+            Icons.rotate_right,
+            size: 35,
+            color: FrontHelpers().gris,
+          ),
+        ));
+  }
+
+   GestureDetector _buildErrorW(AsyncSnapshot<dynamic> snapshot) {
+    return GestureDetector(
+        onTap: () {
+           snapshot.inState(ConnectionState.none);
+          setState(() {});
+        },
+        child: Center(
+          child: Icon(
+            Icons.rotate_right,
+            size: 35,
+            color: FrontHelpers().blanc,
+          ),
+        ));
+  }
+}
+
+
+
+
+
+class _buildLeagues extends StatelessWidget {
+  _buildLeagues({
+    required this.snapshot,
+  });
+  AsyncSnapshot<dynamic> snapshot;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: snapshot.data.length == null ? 0 : snapshot.data.length,
+        itemBuilder: (BuildContext context, int index) {
+          return LeagueWidget(
+            id: snapshot.data[index].id,
+            name: snapshot.data[index].name,
+            logo: snapshot.data[index].logo,
+          );
+        });
+  }
+}
+
+class _buildLiveScore extends StatelessWidget {
+  _buildLiveScore({
+    required this.snapshot,
+  });
+  AsyncSnapshot<dynamic> snapshot;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: snapshot.data.length == null ? 0 : snapshot.data.length,
+        itemBuilder: (BuildContext context, int index) {
+          return FixtureWidget(
+            id: snapshot.data[index].id,
+            leagueName: snapshot.data[index].leagueName,
+            leagueLogo: snapshot.data[index].leagueLogo,
+            homeName: snapshot.data[index].homeName,
+            homeLogo: snapshot.data[index].homeLogo,
+            homeScore: snapshot.data[index].homeScore,
+            awayName: snapshot.data[index].awayName,
+            awayLogo: snapshot.data[index].awayLogo,
+            awayScore: snapshot.data[index].awayScore,
+            status: snapshot.data[index].status,
+          );
+        });
+  }
+}
+
+class _buildFixtures extends StatelessWidget {
+  _buildFixtures({
+    required this.snapshot,
+  });
+  AsyncSnapshot<dynamic> snapshot;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: snapshot.data.length == null ? 0 : snapshot.data.length,
+        itemBuilder: (BuildContext context, int index) {
+          return MatchCard(
+            id: snapshot.data[index].id,
+            leagueName: snapshot.data[index].leagueName,
+            leagueLogo: snapshot.data[index].leagueLogo,
+            homeName: snapshot.data[index].homeName,
+            homeLogo: snapshot.data[index].homeLogo,
+            homeScore: snapshot.data[index].homeScore,
+            awayName: snapshot.data[index].awayName,
+            awayLogo: snapshot.data[index].awayLogo,
+            awayScore: snapshot.data[index].awayScore,
+            status: snapshot.data[index].status,
+          );
+        });
   }
 }

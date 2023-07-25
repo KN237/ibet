@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: Theme.of(context).copyWith(
           colorScheme:
               ColorScheme.fromSwatch().copyWith(secondary: FrontHelpers().blanc)),
-      home: Lineup(),
+      home: Home(),
     );
   }
 }

@@ -62,7 +62,7 @@ class _LineupState extends State<Lineup> {
                   List players2 =
                       fromString(snapshot.data["match_awayteam_system"]);
                   final size = MediaQuery.of(context).size.height /
-                      ((players.length + 1));
+                      ((players.length + 1)*2.5);
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
