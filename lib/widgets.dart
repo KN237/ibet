@@ -541,7 +541,7 @@ class FixtureEvent extends StatelessWidget {
                         height: 20,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: FrontHelpers().rouge),
+                            color: FrontHelpers().gris),
                         child: Center(
                           child: Text(
                             time.toString(),
@@ -554,14 +554,14 @@ class FixtureEvent extends StatelessWidget {
                       SizedBox(
                         height: 15,
                       ),
-                      eventSubType.toString().contains('ellow')
+                      eventType.toString().contains('ellow')
                           ? Icon(
                               Icons.style,
-                              color: Colors.yellow,
+                              color: Color.fromARGB(255, 207, 187, 2),
                             )
-                          : eventSubType.toString().contains('ed')
+                          : eventType.toString().contains('ed')
                               ? Icon(Icons.style, color: Colors.red)
-                              : eventSubType.toString().contains('ub')
+                              : eventType.toString().contains('ub')
                                   ? Icon(Icons.change_circle,)
                                   : Icon(Icons.sports_soccer),
                     ],

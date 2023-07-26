@@ -287,10 +287,7 @@ class _MatchState extends State<Match> {
                               child: ContainedTabBarView(
                                 tabBarProperties: TabBarProperties(
                                     indicatorColor: FrontHelpers().gris),
-                                tabs: [
-                                  Text('Statistics'),
-                                  Text("Events")
-                                ],
+                                tabs: [Text('Statistics'), Text("Events")],
                                 views: [
                                   Container(
                                     color: FrontHelpers().blanc,
@@ -473,7 +470,7 @@ class _MatchState extends State<Match> {
                                                       alignment:
                                                           Alignment.topCenter,
                                                       child: Text(
-                                                        "There was an error ! Please try again later.",
+                                                        "There was an error ! Please try again later. 1",
                                                         style: FrontHelpers()
                                                             .h3
                                                             .copyWith(
@@ -500,7 +497,7 @@ class _MatchState extends State<Match> {
                                                       alignment:
                                                           Alignment.topCenter,
                                                       child: Text(
-                                                        "There's nothing to display now !",
+                                                        "There's nothing to display now ! 2",
                                                         style: FrontHelpers()
                                                             .h3
                                                             .copyWith(

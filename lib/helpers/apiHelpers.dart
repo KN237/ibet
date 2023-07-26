@@ -53,7 +53,6 @@ class ApiHelper {
     var res = await http.get(url);
     final responseJson = json.decode(res.body);
     List<Eventt> leagueList = createEventtList(responseJson[0]);
-
     return leagueList;
   }
 
@@ -100,6 +99,33 @@ class ApiHelper {
 
       list.add(l);
     }
+
+
+     tmp = data['cards'];
+
+    for (int i = 0; i < tmp.length; i++) {
+      var l = Eventt.fromJson(tmp[i], data);
+
+      list.add(l);
+    }
+
+
+     tmp = data['substitutions']['home'];
+
+    for (int i = 0; i < tmp.length; i++) {
+      var l = Eventt.fromJson(tmp[i], data);
+
+      list.add(l);
+    }
+
+     tmp = data['substitutions']['away'];
+
+    for (int i = 0; i < tmp.length; i++) {
+      var l = Eventt.fromJson(tmp[i], data);
+
+      list.add(l);
+    }
+
 
     return list;
   }
