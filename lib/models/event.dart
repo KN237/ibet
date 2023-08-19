@@ -10,40 +10,44 @@ class Eventt {
   Eventt({time, type, subtype, teamName, teamLogo, playerName, assistName});
 
   Eventt.fromJson(Map<String, dynamic> json, Map<String, dynamic> json2) {
-    if (json['score']!=null) {
+    if (json['score']!=null && json['score']!="substitution" ) {
       time = json['time'];
       type = "Goal";
-      subtype = json['score_info_time'];
+      subtype = json['info'];
       teamName = json['home_scorer'] != ""
-          ? json2['match_hometeam_name']
-          : json2['match_awayteam_name'];
+          ? json2['event_home_team']
+          : json2['event_away_team'];
       teamLogo = json['home_scorer'] != ""
-          ? json2['team_home_badge']
-          : json2['team_away_badge'];
+          ? json2['home_team_logo']
+          : json2['away_team_logo'];
       playerName = json['home_scorer'] ?? json['away_scorer'];
       assistName = json['home_assist'] ?? json['away_assist'];
-    } else if (json['card']!=null) {
+    } 
+    
+    if (json['card']!=null) {
       time = json['time'];
       type = json['card'];
-      subtype = json['score_info_time'];
+      subtype = json['info_time'];
       teamName = json['home_fault'] != ""
-          ? json2['match_hometeam_name']
-          : json2['match_awayteam_name'];
+          ? json2['event_home_team']
+          : json2['event_away_team'];
       teamLogo = json['home_fault'] != ""
-          ? json2['team_home_badge']
-          : json2['team_away_badge'];
+          ? json2['home_team_logo']
+          : json2['away_team_logo'];
       playerName = json['home_fault'] ?? json['away_fault'];
       assistName = " ";
-    } else {
+    } 
+    
+    if (json['score']!=null && json['score']=="substitution") {
       time = json['time'];
       type = "substitution";
       subtype = " ";
       teamName = json2['league_name'];
       teamLogo = json2['league_logo'];
 
-      var tmp = json['substitution'].split('|');
-      playerName = tmp[0];
-      assistName = tmp[1];
+      var tmp = json['home_scorer'] is List ? json['away_scorer'] as Map : json['home_scorer'] as Map;
+      playerName = tmp['out'];
+      assistName = tmp['in'];
     }
   }
 

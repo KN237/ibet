@@ -138,7 +138,7 @@ class _Screen1State extends State<Screen1> {
 
                 // FIN LISTE DE LEAGUES PAGE PRINCIPALE
 
-                // DEBUT TITRE SECTION
+               // DEBUT TITRE SECTION
 
                 RowTitleWidget(
                   title: " Live fixtures",
@@ -148,7 +148,7 @@ class _Screen1State extends State<Screen1> {
                   ),
                 ),
 
-                // FIN TITRE SECTION
+               // FIN TITRE SECTION
 
                 // DEBUT LIVESCORE
                 Container(

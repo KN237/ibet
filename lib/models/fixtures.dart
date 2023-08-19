@@ -28,17 +28,19 @@ class Fixture {
       round});
 
   Fixture.fromJson(Map<String, dynamic> json) {
-    id = json['match_id'];
+    var tmp= json['event_final_result'].replaceAll(' ', '');
+    var score = tmp.split('-'); 
+    id = json['event_key'];
     leagueName = json['league_name'];
     leagueLogo = json['league_logo'];
-    homeName = json['match_hometeam_name'];
-    homeScore = json['match_hometeam_score'];
-    homeLogo = json['team_home_badge'];
-    awayName = json['match_awayteam_name'];
-    awayScore = json['match_awayteam_score'];
-    awayLogo = json['team_away_badge'];
-    status = json['match_status'];
-    round = json['match_date'];
+    homeName = json['event_home_team'];
+    homeScore = score[0];
+    homeLogo = json['home_team_logo'];
+    awayName = json['event_away_team'];
+    awayScore = score[1];
+    awayLogo = json['away_team_logo'];
+    status = json['event_status'];
+    round = json['event_date'] +" "+json['event_time'];
   }
 
   @override

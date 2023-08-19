@@ -2,7 +2,6 @@ import 'package:Ibet/screens/match.dart';
 import 'package:flutter/material.dart';
 import 'package:Ibet/helpers/frontHelpers.dart';
 import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class LeagueRoundedCard extends StatelessWidget {
   const LeagueRoundedCard({
@@ -43,7 +42,7 @@ class LeagueWidget extends StatelessWidget {
     required this.name,
     required this.logo,
   });
-  final String id;
+  final int id;
   final String name;
   final String logo;
   @override
@@ -51,10 +50,13 @@ class LeagueWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 08.0),
       child: CircleAvatar(
-        child: Image.network(logo, width: 50, errorBuilder:
-            (BuildContext context, Object exception, StackTrace? stackTrace) {
-          return Icon(Icons.hide_image, color: FrontHelpers().gris);
-        }),
+        child: logo != null
+            ? Image.network(logo, width: 50, height: 50, errorBuilder:
+                (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                return Icon(Icons.question_mark, color: FrontHelpers().gris);
+              })
+            : Icon(Icons.question_mark, color: FrontHelpers().gris),
         backgroundColor: FrontHelpers().blanc,
         radius: 40,
       ),
@@ -119,73 +121,83 @@ class FixtureWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Image.network(homeLogo, width: 50, errorBuilder:
-                        (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                      return Icon(Icons.hide_image, color: FrontHelpers().gris);
-                    }),
-                    Image.network(awayLogo, width: 50, errorBuilder:
-                        (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                      return Icon(Icons.hide_image, color: FrontHelpers().gris);
-                    }),
+                    homeLogo != null
+                        ? Image.network(homeLogo, width: 50, errorBuilder:
+                            (BuildContext context, Object exception,
+                                StackTrace? stackTrace) {
+                            return Icon(Icons.question_mark,
+                                color: FrontHelpers().gris);
+                          })
+                        : Icon(Icons.question_mark, color: FrontHelpers().gris),
+                    awayLogo != null
+                        ? Image.network(awayLogo, width: 50, errorBuilder:
+                            (BuildContext context, Object exception,
+                                StackTrace? stackTrace) {
+                            return Icon(Icons.question_mark,
+                                color: FrontHelpers().gris);
+                          })
+                        : Icon(Icons.question_mark, color: FrontHelpers().gris),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 70,
-                                child: Text(homeName,
-                                    style: FrontHelpers().bodyText.copyWith(
-                                        color: FrontHelpers().blanc,
-                                        fontFamily: "Nexa"),
-                                    softWrap: false,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade),
-                              ),
-                              Container(
-                                width: 70,
-                                child: Text(awayName,
-                                    style: FrontHelpers().bodyText.copyWith(
-                                        color: FrontHelpers().blanc,
-                                        fontFamily: "Nexa"),
-                                    softWrap: false,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            width: 20.0,
-                          ),
-                          Column(
-                            children: [
-                              Text(homeScore.toString() ?? '0',
-                                  style: FrontHelpers()
-                                      .bodyText
-                                      .copyWith(color: FrontHelpers().blanc)),
-                              Text(awayScore.toString() ?? '0',
-                                  style: FrontHelpers()
-                                      .bodyText
-                                      .copyWith(color: FrontHelpers().blanc))
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 70,
+                              child: Text(homeName,
+                                  style: FrontHelpers().bodyText.copyWith(
+                                      color: FrontHelpers().blanc,
+                                      fontFamily: "Nexa"),
+                                  softWrap: false,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade),
+                            ),
+                            Container(
+                              width: 70,
+                              child: Text(awayName,
+                                  style: FrontHelpers().bodyText.copyWith(
+                                      color: FrontHelpers().blanc,
+                                      fontFamily: "Nexa"),
+                                  softWrap: false,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          textBaseline: TextBaseline.alphabetic,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            homeScore != null
+                                ? Text(homeScore.toString(),
+                                    style: FrontHelpers()
+                                        .bodyText
+                                        .copyWith(color: FrontHelpers().blanc))
+                                : Text('0'),
+                            awayScore != null
+                                ? Text(awayScore.toString(),
+                                    style: FrontHelpers()
+                                        .bodyText
+                                        .copyWith(color: FrontHelpers().blanc))
+                                : Text('0'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 Center(
                   child: Container(
-                    width: MediaQuery.of(context).size.width / 3,
+                    width: MediaQuery.of(context).size.width / 4,
                     height: 25,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
@@ -193,7 +205,7 @@ class FixtureWidget extends StatelessWidget {
                     ),
                     child: Center(
                         child: Text(
-                      status,
+                      status + '\' ',
                       style: FrontHelpers()
                           .bodyText
                           .copyWith(color: FrontHelpers().gris),
@@ -429,8 +441,6 @@ class RowTitleWidget extends StatelessWidget {
   }
 }
 
-
-
 class Characteristique extends StatelessWidget {
   Characteristique({
     required this.team1,
@@ -485,7 +495,7 @@ class FixtureEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 03.0),
+      margin: EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
         width: MediaQuery.of(context).size.width -
             (MediaQuery.of(context).size.width / 20),
@@ -562,7 +572,9 @@ class FixtureEvent extends StatelessWidget {
                           : eventType.toString().contains('ed')
                               ? Icon(Icons.style, color: Colors.red)
                               : eventType.toString().contains('ub')
-                                  ? Icon(Icons.change_circle,)
+                                  ? Icon(
+                                      Icons.change_circle,
+                                    )
                                   : Icon(Icons.sports_soccer),
                     ],
                   ),
