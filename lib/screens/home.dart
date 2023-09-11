@@ -1,11 +1,10 @@
 import 'package:Ibet/models/fixtures.dart';
-import 'package:Ibet/screens/fixtures.dart';
-import 'package:Ibet/screens/standings.dart';
+import 'package:Ibet/screens/live.dart';
+import 'package:Ibet/screens/premium.dart';
 import 'package:flutter/material.dart';
 import 'package:Ibet/helpers/frontHelpers.dart';
 import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
 import 'package:Ibet/widgets.dart';
-import '../helpers/apiHelpers.dart';
 import '../models/league.dart';
 
 class Home extends StatefulWidget {
@@ -16,9 +15,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List WidgetOptions = [Screen1(), Fixtures(), Standings()];
+  List WidgetOptions = [Screen1(), Live(), Premium()];
 
   int _selectedIndex = 0;
+
+  List titres = ["Ibet Pronostics", "Live Pronostics", "Premium Pronostics"];
 
   @override
   Widget build(BuildContext context) {
@@ -37,46 +38,40 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.home),
           ),
           MoltenTab(
-            icon: Icon(Icons.sports_soccer),
+            icon: Icon(Icons.live_tv),
           ),
           MoltenTab(
-            icon: Icon(Icons.bar_chart),
+            icon: Icon(Icons.credit_card),
           ),
         ],
       ),
       appBar: AppBar(
-        title: Text("LiveScore", style: FrontHelpers().h1),
+        title: Text(titres[_selectedIndex],
+            style: FrontHelpers().h1.copyWith(color: FrontHelpers().blanc)),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              showAlertDialog(context);
+            },
+            child: Icon(
+              Icons.attach_money,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          )
+        ],
         centerTitle: true,
         elevation: 0,
-        backgroundColor: FrontHelpers().blanc,
+        backgroundColor: FrontHelpers().gris,
       ),
       body: WidgetOptions[_selectedIndex],
     );
   }
 }
 
-class Screen1 extends StatefulWidget {
-  const Screen1({
-    super.key,
-  });
-
-  @override
-  State<Screen1> createState() => _Screen1State();
-}
-
-class _Screen1State extends State<Screen1> {
-  late Future<List<League>> leagues;
-  late Future<List<Fixture>> lives;
-  late Future<List<Fixture>> last;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    leagues = ApiHelper().getLeagues();
-    lives = ApiHelper().getLiveFixtures();
-    last = ApiHelper().getLastFixtures();
-  }
-
+class Screen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -91,137 +86,58 @@ class _Screen1State extends State<Screen1> {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 100,
-                  margin: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.width / 20,
-                      top: 20,
-                      bottom: 10),
+                  margin:
+                      EdgeInsets.only(left: 05, top: 10, bottom: 10, right: 05),
                   decoration: BoxDecoration(
                     gradient: FrontHelpers().orangeGradient,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(50),
-                        bottomLeft: Radius.circular(50)),
                   ),
-
-                  // DEBUT LISTE DE LEAGUES PAGE PRINCIPALE
-
-                  child: FutureBuilder(
-                      future: leagues,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                              child: CircularProgressIndicator(
-                            color: FrontHelpers().blanc,
-                          ));
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.done) {
-                          if (snapshot.hasError) {
-                            return _buildErrorW(snapshot);
-                          } else if (snapshot.hasData) {
-                            return _buildLeagues(snapshot: snapshot);
-                          } else {
-                            return GestureDetector(
-                                onTap: () {
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.rotate_right,
-                                  color: FrontHelpers().blanc,
-                                ));
-                          }
-                        } else {
-                          return _buildErrorW(snapshot);
-                        }
-                      }),
-                ),
-
-                // FIN LISTE DE LEAGUES PAGE PRINCIPALE
-
-               // DEBUT TITRE SECTION
-
-                RowTitleWidget(
-                  title: " Live fixtures",
-                  widget: Image.asset(
-                    "assets/images/fr.png",
-                    width: 20,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                " CURRENT CREDIT BALANCE",
+                                style: FrontHelpers().h3.copyWith(
+                                    color: FrontHelpers().blanc,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text("15.00",
+                                  style: FrontHelpers().h1.copyWith(
+                                      color: FrontHelpers().blanc,
+                                      fontSize: 25)),
+                            ],
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(
+                          Icons.wallet,
+                          color: FrontHelpers().blanc,
+                          size: 40,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-
-               // FIN TITRE SECTION
-
-                // DEBUT LIVESCORE
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 3.5,
-                  child: FutureBuilder(
-                      future: lives,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                              child: CircularProgressIndicator(
-                            color: FrontHelpers().gris,
-                          ));
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.done) {
-                          if (snapshot.hasError) {
-                            return _buildError(snapshot);
-                          } else if (snapshot.hasData) {
-                            return _buildLiveScore(snapshot: snapshot);
-                          } else {
-                            return _buildError(snapshot);
-                          }
-                        } else {
-                          return _buildError(snapshot);
-                        }
-                      }),
-                ),
-
-                // FIN LIVESCORE
-
-                // DEBUT TITRE SECTION
-                RowTitleWidget(
-                    title: " Fixtures",
-                    widget: Icon(
-                      Icons.calendar_month,
-                      color: FrontHelpers().gris,
-                    )),
-                SizedBox(
-                  height: 10.0,
-                ),
-
-                // FIN TITRE SECTION
-
-                // DEBUT FIXTURES
-                Flexible(
-                  child: FutureBuilder(
-                      future: last,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                              child: CircularProgressIndicator(
-                            color: FrontHelpers().gris,
-                          ));
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.done) {
-                          if (snapshot.hasError) {
-                            return _buildError(snapshot);
-                          } else if (snapshot.hasData) {
-                            return _buildFixtures(snapshot: snapshot);
-                          } else {
-                            return _buildError(snapshot);
-                          }
-                        } else {
-                          return _buildError(snapshot);
-                        }
-                      }),
+                  height: MediaQuery.of(context).size.height/1.6,
+                  child: Center(
+                    child: ListView.builder(
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return _buildFixtures();
+                      },
+                    ),
+                  ),
                 )
-
-                // FIN FIXTURES
               ],
             ),
           ),
@@ -229,112 +145,44 @@ class _Screen1State extends State<Screen1> {
       ),
     );
   }
-
-  GestureDetector _buildError(AsyncSnapshot<dynamic> snapshot) {
-    return GestureDetector(
-        onTap: () {
-          snapshot.inState(ConnectionState.none);
-          setState(() {});
-        },
-        child: Center(
-          child: Icon(
-            Icons.rotate_right,
-            size: 35,
-            color: FrontHelpers().gris,
-          ),
-        ));
-  }
-
-   GestureDetector _buildErrorW(AsyncSnapshot<dynamic> snapshot) {
-    return GestureDetector(
-        onTap: () {
-           snapshot.inState(ConnectionState.none);
-          setState(() {});
-        },
-        child: Center(
-          child: Icon(
-            Icons.rotate_right,
-            size: 35,
-            color: FrontHelpers().blanc,
-          ),
-        ));
-  }
-}
-
-
-
-
-
-class _buildLeagues extends StatelessWidget {
-  _buildLeagues({
-    required this.snapshot,
-  });
-  AsyncSnapshot<dynamic> snapshot;
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: snapshot.data.length == null ? 0 : snapshot.data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return LeagueWidget(
-            id: snapshot.data[index].id,
-            name: snapshot.data[index].name,
-            logo: snapshot.data[index].logo,
-          );
-        });
-  }
-}
-
-class _buildLiveScore extends StatelessWidget {
-  _buildLiveScore({
-    required this.snapshot,
-  });
-  AsyncSnapshot<dynamic> snapshot;
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: snapshot.data.length == null ? 0 : snapshot.data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return FixtureWidget(
-            id: snapshot.data[index].id,
-            leagueName: snapshot.data[index].leagueName,
-            leagueLogo: snapshot.data[index].leagueLogo,
-            homeName: snapshot.data[index].homeName,
-            homeLogo: snapshot.data[index].homeLogo,
-            homeScore: snapshot.data[index].homeScore,
-            awayName: snapshot.data[index].awayName,
-            awayLogo: snapshot.data[index].awayLogo,
-            awayScore: snapshot.data[index].awayScore,
-            status: snapshot.data[index].status,
-          );
-        });
-  }
 }
 
 class _buildFixtures extends StatelessWidget {
-  _buildFixtures({
-    required this.snapshot,
-  });
-  AsyncSnapshot<dynamic> snapshot;
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: snapshot.data.length == null ? 0 : snapshot.data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return MatchCard(
-            id: snapshot.data[index].id,
-            leagueName: snapshot.data[index].leagueName,
-            leagueLogo: snapshot.data[index].leagueLogo,
-            homeName: snapshot.data[index].homeName,
-            homeLogo: snapshot.data[index].homeLogo,
-            homeScore: snapshot.data[index].homeScore,
-            awayName: snapshot.data[index].awayName,
-            awayLogo: snapshot.data[index].awayLogo,
-            awayScore: snapshot.data[index].awayScore,
-            status: snapshot.data[index].status,
-          );
-        });
+    return MatchCard();
   }
 }
+
+
+showAlertDialog(BuildContext context) { 
+
+   // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text("Cancel", style: FrontHelpers().h4.copyWith(fontWeight: FontWeight.w400),),
+    onPressed:  () {Navigator.of(context).pop(); },
+  );
+  Widget continueButton = TextButton(
+    child: Text("Continue",style: FrontHelpers().h4.copyWith(fontWeight: FontWeight.w400)),
+    onPressed:  () {Navigator.of(context).pop(); },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Get Free Credits"),
+    content: Text("Do you want to watch ads to make 1 credit ?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+
+ }
